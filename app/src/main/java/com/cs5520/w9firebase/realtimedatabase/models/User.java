@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class User {
     private String username;
-    private Integer stickersSent;
+    private Integer numStickersSent;
     private ArrayList<Sticker> stickersReceived;
 
     public User() {}
@@ -22,11 +22,11 @@ public class User {
     }
 
     public Integer getStickersSent() {
-        return stickersSent;
+        return numStickersSent;
     }
 
     public void setStickersSent(Integer stickersSent) {
-        this.stickersSent = stickersSent;
+        this.numStickersSent = stickersSent;
     }
 
     public ArrayList<Sticker> getStickersReceived() {
