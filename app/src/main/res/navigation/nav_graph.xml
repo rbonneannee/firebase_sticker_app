@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_databaseActivity"
+            app:destination="@id/databaseActivity" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -25,4 +28,9 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+    <activity
+        android:id="@+id/databaseActivity"
+        android:name="com.cs5520.w9firebase.realtimedatabase.DatabaseActivity"
+        android:label="activity_database"
+        tools:layout="@layout/activity_database" />
 </navigation>
