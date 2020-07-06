@@ -3,13 +3,11 @@ package com.cs5520.w9firebase.realtimedatabase.models;
 import java.util.ArrayList;
 
 public class User {
-    private String username; // TODO: Must be unique.
+    private String username;
     private Integer numStickersSent;
-//    private ArrayList<Sticker> stickersReceived; // TODO don't do it like this. Fix in later version.
+    private ArrayList<Sticker> stickersReceived;
 
-    public User() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
-    }
+    public User() {}
 
     public User(String username) {
         this.username = username;
@@ -23,19 +21,19 @@ public class User {
         this.username = username;
     }
 
-//    public Integer getStickersSent() {
-//        return numStickersSent;
-//    }
+    public Integer getStickersSent() {
+        return numStickersSent;
+    }
 
-//    public void setStickersSent(Integer stickersSent) {
-//        this.numStickersSent = stickersSent;
-//    }
+    public void setStickersSent(Integer stickersSent) {
+        this.numStickersSent = stickersSent;
+    }
 
-//    public ArrayList<Sticker> getStickersReceived() {
-//        return stickersReceived;
-//    }
+    public ArrayList<Sticker> getStickersReceived() {
+        return stickersReceived;
+    }
 
-//    public void setStickersReceived(ArrayList<Sticker> stickersReceived) {
-//        this.stickersReceived = stickersReceived;
-//    }
+    public void setStickersReceived(ArrayList<Sticker> stickersReceived) {
+        this.stickersReceived = stickersReceived;
+    }
 }
