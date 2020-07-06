@@ -8,9 +8,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme">
-        <activity android:name=".CloudMsgActivity"></activity>
+        <activity android:name=".CloudMsgActivity" />
         <activity android:name=".realtimedatabase.DatabaseActivity" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
