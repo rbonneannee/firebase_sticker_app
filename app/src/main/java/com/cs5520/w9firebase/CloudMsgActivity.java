@@ -1,28 +1,18 @@
 package com.cs5520.w9firebase;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.cs5520.w9firebase.realtimedatabase.models.Sticker;
 import com.cs5520.w9firebase.realtimedatabase.models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +21,10 @@ public class CloudMsgActivity extends AppCompatActivity {
     private static final String TAG = CloudMsgActivity.class.getSimpleName();
 
     private DatabaseReference database;
-    private Spinner spinner;
+    private Spinner userSpinner;
+    private Spinner stickerSpinner;
     private List<User> userList;
+    private List<Sticker> stickerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +32,10 @@ public class CloudMsgActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cloud_msg);
         this.database = FirebaseDatabase.getInstance().getReference().child("users");
 
-        this.spinner = (Spinner) findViewById(R.id.spinner);
+        this.userSpinner = (Spinner) findViewById(R.id.spinner_user);
+        this.stickerSpinner = (Spinner) findViewById(R.id.spinner_sticker);
         this.userList = new ArrayList<User>();
+        this.stickerList = new ArrayList<Sticker>();
 
         // TODO: Replace hardcoded users with users in database
         User u0 = new User("Andrea");
@@ -57,27 +51,22 @@ public class CloudMsgActivity extends AppCompatActivity {
         userList.add(u2);
         userList.add(u3);
 
-        // Create an ArrayAdapter using the User array and a default spinner layout
-        ArrayAdapter<User> adapter = new ArrayAdapter<User>(this, android.R.layout.simple_spinner_item, userList);
+        // TODO: Replace hardcoded stickers with stickers in database
+        Sticker s0 = new Sticker();
+        s0.setStickerName("doll");
+        Sticker s1 = new Sticker();
+        s1.setStickerName("balloon");
+        Sticker s2 = new Sticker();
+        s2.setStickerName("smile");
+        Sticker s3 = new Sticker();
+        s3.setStickerName("rain cloud");
+        stickerList.add(s0);
+        stickerList.add(s1);
+        stickerList.add(s2);
+        stickerList.add(s3);
 
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                User user = (User) parent.getSelectedItem();
-                displayUserData(user);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        setUserSpinner();
+        setStickerSpinner();
 
 
  /*
@@ -107,8 +96,38 @@ public class CloudMsgActivity extends AppCompatActivity {
 */
     }
 
+
+
+    // TODO: Low priority - Create one setSpinner method that can handle both User and
+    //  Sticker objects
+    // FOR USER SPINNER
+    private void setUserSpinner() {
+
+        // Create an ArrayAdapter using the User array and a default spinner layout
+        ArrayAdapter<User> adapter = new ArrayAdapter<User>(this, android.R.layout.simple_spinner_item, userList);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        userSpinner.setAdapter(adapter);
+
+        userSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                User user = (User) parent.getSelectedItem();
+                displayUserData(user);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     public void getSelectedUser(View v) {
-        User user = (User) spinner.getSelectedItem();
+        User user = (User) userSpinner.getSelectedItem();
         displayUserData(user);
     }
 
@@ -117,10 +136,48 @@ public class CloudMsgActivity extends AppCompatActivity {
         String regToken = user.getRegistrationToken();
         Integer numStickersSent = user.getNumStickersSent();
 
-        String userData = "Username: " + username + "\nToken: " + regToken + "\n# Stickers Sent: "
+        String data = "Username: " + username + "\nToken: " + regToken + "\n# Stickers Sent: "
                 + numStickersSent;
-
-        Toast.makeText(this, userData, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
+
+    // FOR STICKER SPINNER
+    private void setStickerSpinner() {
+
+        // Create an ArrayAdapter using the User array and a default spinner layout
+        ArrayAdapter<Sticker> adapter = new ArrayAdapter<Sticker>(this, android.R.layout.simple_spinner_item, stickerList);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        stickerSpinner.setAdapter(adapter);
+
+        stickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Sticker sticker = (Sticker) parent.getSelectedItem();
+                displayStickerData(sticker);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void displayStickerData(Sticker sticker) {
+        String stickerName = sticker.getStickerName();
+
+        String data = "Sticker: " + stickerName;
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+    }
+
+    public void getSelectedSticker(View v) {
+        Sticker sticker = (Sticker) stickerSpinner.getSelectedItem();
+        displayStickerData(sticker);
+    }
+
 
 }
