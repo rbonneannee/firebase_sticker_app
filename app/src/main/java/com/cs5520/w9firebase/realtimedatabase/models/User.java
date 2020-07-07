@@ -1,5 +1,7 @@
 package com.cs5520.w9firebase.realtimedatabase.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 public class User {
@@ -12,6 +14,7 @@ public class User {
 
     public User(String username) {
         this.username = username;
+        this.numStickersSent = 0;
     }
 
     public String getUsername() {
@@ -44,5 +47,11 @@ public class User {
 
     public void setNumStickersSent(Integer numStickersSent) {
         this.numStickersSent = numStickersSent;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.username;
     }
 }
