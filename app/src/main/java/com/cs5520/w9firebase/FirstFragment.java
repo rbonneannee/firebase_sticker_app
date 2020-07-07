@@ -105,13 +105,11 @@ public class FirstFragment extends Fragment {
                 String msg = "InstanceID Token: " + token;
                 Log.d(TAG, msg);
 
-                // Update and save user to database
+                // Update and save user to database -
                 mUser.setRegistrationToken(token);
                 mUser.setNumStickersSent(0);
 
-                // TODO: Uncomment to identify users by regToken
-                //mDatabase.child("users").child(mUser.getRegistrationToken()).setValue(mUser);
-
+                // users are identified by token
                 mDatabase.child("users").child(mUser.getRegistrationToken()).setValue(mUser);
             }
         });
