@@ -1,8 +1,11 @@
 package com.cs5520.w9firebase;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,8 +14,12 @@ import android.widget.Toast;
 
 import com.cs5520.w9firebase.realtimedatabase.models.Sticker;
 import com.cs5520.w9firebase.realtimedatabase.models.User;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,34 +44,102 @@ public class CloudMsgActivity extends AppCompatActivity {
         this.userList = new ArrayList<User>();
         this.stickerList = new ArrayList<Sticker>();
 
-        // TODO: Replace hardcoded users with users in database
-        User u0 = new User("Andrea");
-        u0.setRegistrationToken("regA");
-        User u1 = new User("Bebe");
-        u1.setRegistrationToken("regB");
-        User u2 = new User("Carmen");
-        u2.setRegistrationToken("regC");
-        User u3 = new User("Damien");
-        u3.setRegistrationToken("regD");
-        userList.add(u0);
-        userList.add(u1);
-        userList.add(u2);
-        userList.add(u3);
+        database = FirebaseDatabase.getInstance().getReference();
+        //DatabaseReference userRef = database.getReference("users");
+
+        //This code looks complicated, but most of this is automatically generated methods.
+        //Look at Line 61 of RealTimeDatabaseActivity in the Professor's firebase demo
+        database.child("users").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                userList.add(user);
+            }
+
+            //TODO: Find some way to find index. Updating currently not implemented
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                //userList.set()
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                userList.remove(user);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled:" + error);
+            }
+        });
+
+//        User u0 = new User("Andrea");
+//        u0.setRegistrationToken("regA");
+//        User u1 = new User("Bebe");
+//        u1.setRegistrationToken("regB");
+//        User u2 = new User("Carmen");
+//        u2.setRegistrationToken("regC");
+//        User u3 = new User("Damien");
+//        u3.setRegistrationToken("regD");
+//        userList.add(u0);
+//        userList.add(u1);
+//        userList.add(u2);
+//        userList.add(u3);
+
 
         // TODO: Replace hardcoded stickers with stickers in database
-        Sticker s0 = new Sticker();
-        s0.setStickerName("doll");
-        Sticker s1 = new Sticker();
-        s1.setStickerName("balloon");
-        Sticker s2 = new Sticker();
-        s2.setStickerName("smile");
-        Sticker s3 = new Sticker();
-        s3.setStickerName("rain cloud");
-        stickerList.add(s0);
-        stickerList.add(s1);
-        stickerList.add(s2);
-        stickerList.add(s3);
+        database.child("stickers").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Sticker sticker = snapshot.getValue(Sticker.class);
+                stickerList.add(sticker);
+            }
 
+            //TODO: Find some way to find index. Updating currently not implemented
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Sticker sticker = snapshot.getValue(Sticker.class);
+                //stickerList.set(sticker);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                userList.remove(user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled:" + error);
+            }
+        });
+
+//        Sticker s0 = new Sticker();
+//        s0.setStickerName("doll");
+//        Sticker s1 = new Sticker();
+//        s1.setStickerName("balloon");
+//        Sticker s2 = new Sticker();
+//        s2.setStickerName("smile");
+//        Sticker s3 = new Sticker();
+//        s3.setStickerName("rain cloud");
+//        stickerList.add(s0);
+//        stickerList.add(s1);
+//        stickerList.add(s2);
+//        stickerList.add(s3);
+
+        //TODO: Set default spinner value. Currently they start blank
         setUserSpinner();
         setStickerSpinner();
 
