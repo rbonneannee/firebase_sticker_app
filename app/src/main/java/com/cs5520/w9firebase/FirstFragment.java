@@ -108,7 +108,11 @@ public class FirstFragment extends Fragment {
                 // Update and save user to database
                 mUser.setRegistrationToken(token);
                 mUser.setNumStickersSent(0);
-                mDatabase.child("users").child(mUser.getUsername()).setValue(mUser);
+
+                // TODO: Uncomment to identify users by regToken
+                //mDatabase.child("users").child(mUser.getRegistrationToken()).setValue(mUser);
+
+                mDatabase.child("users").child(mUser.getRegistrationToken()).setValue(mUser);
             }
         });
     }

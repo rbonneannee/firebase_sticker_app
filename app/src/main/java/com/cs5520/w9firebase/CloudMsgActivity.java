@@ -37,15 +37,20 @@ public class CloudMsgActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloud_msg);
+
+        // TODO: this.database gets reinitialized - Remove 1 (likely the first one) -
         this.database = FirebaseDatabase.getInstance().getReference().child("users");
+        database = FirebaseDatabase.getInstance().getReference();
+        //DatabaseReference userRef = database.getReference("users");
 
         this.userSpinner = (Spinner) findViewById(R.id.spinner_user);
         this.stickerSpinner = (Spinner) findViewById(R.id.spinner_sticker);
         this.userList = new ArrayList<User>();
         this.stickerList = new ArrayList<Sticker>();
 
-        database = FirebaseDatabase.getInstance().getReference();
-        //DatabaseReference userRef = database.getReference("users");
+
+        Log.d(TAG, "Initialization: userlist =  " + userList.size());
+
 
         //This code looks complicated, but most of this is automatically generated methods.
         //Look at Line 61 of RealTimeDatabaseActivity in the Professor's firebase demo
@@ -54,6 +59,8 @@ public class CloudMsgActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User user = snapshot.getValue(User.class);
                 userList.add(user);
+                Log.d(TAG, "onChildAdded userList =  " + userList.size());
+                setUserSpinner();
             }
 
             //TODO: Find some way to find index. Updating currently not implemented
@@ -80,6 +87,8 @@ public class CloudMsgActivity extends AppCompatActivity {
             }
         });
 
+
+
 //        User u0 = new User("Andrea");
 //        u0.setRegistrationToken("regA");
 //        User u1 = new User("Bebe");
@@ -93,13 +102,14 @@ public class CloudMsgActivity extends AppCompatActivity {
 //        userList.add(u2);
 //        userList.add(u3);
 
-
         // TODO: Replace hardcoded stickers with stickers in database
         database.child("stickers").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Sticker sticker = snapshot.getValue(Sticker.class);
                 stickerList.add(sticker);
+                Log.d(TAG, "Inside Sticker's onChildAdded: userlist =  " + userList.size());
+                setStickerSpinner();
             }
 
             //TODO: Find some way to find index. Updating currently not implemented
@@ -140,7 +150,9 @@ public class CloudMsgActivity extends AppCompatActivity {
 //        stickerList.add(s3);
 
         //TODO: Set default spinner value. Currently they start blank
+        Log.d(TAG, "Before setUserSpinner: userList =  " + userList.size());
         setUserSpinner();
+        Log.d(TAG, "After setUserSpinner: userList =  " + userList.size());
         setStickerSpinner();
 
 
@@ -177,6 +189,7 @@ public class CloudMsgActivity extends AppCompatActivity {
     //  Sticker objects
     // FOR USER SPINNER
     private void setUserSpinner() {
+        Log.d(TAG, "IN setUserSpinner: userList =  " + userList.size());
 
         // Create an ArrayAdapter using the User array and a default spinner layout
         ArrayAdapter<User> adapter = new ArrayAdapter<User>(this, android.R.layout.simple_spinner_item, userList);
@@ -187,6 +200,14 @@ public class CloudMsgActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         userSpinner.setAdapter(adapter);
 
+        if (userList.size() == 0) {
+            Log.d(TAG, "userList is empty =  " + userList.size());
+        }
+
+        for (User user : userList) {
+            Log.d(TAG, "here" + user.toString());
+        }
+
         userSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -196,6 +217,7 @@ public class CloudMsgActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
 
             }
         });
