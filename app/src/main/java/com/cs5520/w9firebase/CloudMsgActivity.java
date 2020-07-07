@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -37,7 +39,7 @@ public class CloudMsgActivity extends AppCompatActivity {
                                     return;
                                 }
 
-                                // Get and displays unique app instance token
+                                // Gets and displays unique app instance token
                                 String token = task.getResult().getToken();
                                 String msg = "InstanceID Token: " + token;
                                 Log.d(TAG, msg);
@@ -46,5 +48,9 @@ public class CloudMsgActivity extends AppCompatActivity {
                         });
             }
         });
+
+
+
     }
+
 }

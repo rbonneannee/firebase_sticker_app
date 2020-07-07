@@ -20,8 +20,10 @@ import com.google.firebase.iid.InstanceIdResult;
 public class DatabaseActivity extends AppCompatActivity {
     private static final String SERVER_KEY = "key=AAAAgmQuzxA:APA91bFW8VCokyXik3ngcV7mKS-UHUWrUqvE08pZOpy1AHszBih88Tvw8t0ciEc0BN3hGk_8810tB-yjx8zQVxhAjjxiYuLZPh91hsfgSarEN5Fn8ikLDfG2k6JZWGDwFg1rlRkwtXtV";
 
+    private static final String TAG = DatabaseActivity.class.getSimpleName();
+
     // Reference to Firebase Realtime Database
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseRootRef = FirebaseDatabase.getInstance().getReference();
 
 
 
@@ -29,9 +31,5 @@ public class DatabaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
-
-        // initialize elements with findViewById
-
-        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 }

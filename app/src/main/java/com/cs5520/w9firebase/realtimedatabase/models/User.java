@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class User {
     private String username;
+    private String registrationToken;
     private Integer numStickersSent;
     private ArrayList<Sticker> stickersReceived;
 
@@ -21,19 +22,27 @@ public class User {
         this.username = username;
     }
 
-    public Integer getStickersSent() {
-        return numStickersSent;
-    }
-
-    public void setStickersSent(Integer stickersSent) {
-        this.numStickersSent = stickersSent;
-    }
-
     public ArrayList<Sticker> getStickersReceived() {
         return stickersReceived;
     }
 
     public void setStickersReceived(ArrayList<Sticker> stickersReceived) {
         this.stickersReceived = stickersReceived;
+    }
+
+    public String getRegistrationToken() {
+        return registrationToken;
+    }
+
+    public void setRegistrationToken(String registrationToken) {
+        this.registrationToken = registrationToken;
+    }
+
+    public Integer getNumStickersSent() {
+        return numStickersSent;
+    }
+
+    public void setNumStickersSent(Integer numStickersSent) {
+        this.numStickersSent = numStickersSent;
     }
 }
