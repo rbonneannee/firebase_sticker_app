@@ -34,12 +34,14 @@ exports.sendMessageNotification = functions.database.ref('/messages/{messageUid}
         },
         data: {
           sticker: `${message.stickerName}`
-        },
-        android: {
-          priority: 'high'
         }
       };
       functions.logger.log('LOGGER payload: ', payload);
 
-      admin.messaging().sendToDevice(message.receiverToken, payload);
+      const options = {
+        priority: 'high',
+        timeToLive: 60 * 60 * 24
+      }
+
+      admin.messaging().sendToDevice(message.receiverToken, payload, options);
     });
