@@ -1,5 +1,6 @@
 package com.cs5520.w9firebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,8 +62,11 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
                 if (createUser(view)) {
                     writeUser();
-                    NavHostFragment.findNavController(FirstFragment.this)
-                            .navigate(R.id.action_FirstFragment_to_cloudMsgActivity);
+//                    NavHostFragment.findNavController(FirstFragment.this)
+//                            .navigate(R.id.action_FirstFragment_to_cloudMsgActivity);
+                    Intent cloudMsg = new Intent(getActivity(), CloudMsgActivity.class);
+                    cloudMsg.putExtra("userToken", mUser.getRegistrationToken());
+                    startActivity(cloudMsg);
                 }
             }
         });

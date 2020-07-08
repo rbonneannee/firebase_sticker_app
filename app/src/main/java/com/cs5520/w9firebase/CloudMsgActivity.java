@@ -33,6 +33,8 @@ public class CloudMsgActivity extends AppCompatActivity {
     private Spinner stickerSpinner;
     private List<User> userList;
     private ArrayList<Sticker> stickerList;
+    //private User currentUser;
+    //private String currentUserToken;
 
     private StickerAdapter stickerAdapter;
 
@@ -42,7 +44,7 @@ public class CloudMsgActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cloud_msg);
 
         this.database = FirebaseDatabase.getInstance().getReference();
-
+        //this.currentUserToken = getIntent().getStringExtra("userToken");
         this.userSpinner = (Spinner) findViewById(R.id.spinner_user);
         this.stickerSpinner = (Spinner) findViewById(R.id.spinner_sticker);
         this.userList = new ArrayList<User>();
@@ -53,9 +55,13 @@ public class CloudMsgActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Message msg = new Message();
-                msg.setBody("body");
-                msg.setReceiverToken("dAX1cJFvTuyM-5ErfSs2yV:APA91bEi_mc4_y7WU6285z1v7X5_ftO36agvnhHIHWYYsr81_mDog6LINXAsfQ3cVM3pjkdKYTw7uJaR0_aDVw7BjRQQZgXBUzMn5WL2OBYGZurQwpINopi-tWGWSMOtsW8tlyofSfxu");
+                Sticker message = (Sticker)stickerSpinner.getSelectedItem();
+                User recipient = (User)userSpinner.getSelectedItem();
+                msg.setBody(message.getStickerName());
                 msg.setSenderToken("f1SGFKfeQsecNL6i8Hkvt_:APA91bGymszYD2WzLoDGsLa6W82zlDVAjc39kyrz87krV6a8F9HBMdFFYxpo0eFatqt3MSUxC1yIw1Z8teoixe5JMxcxPGtsLkyWONuIbp5E9jAtMwPv4jEB5iUOCwb2Kfi9yStAjOFO");
+                //msg.setSenderToken(currentUserToken);
+                //msg.setSenderToken();
+                msg.setReceiverToken(recipient.getRegistrationToken());
                 database.child("messages").push().setValue(msg);
             }
         });
