@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,8 +34,10 @@ public class CloudMsgActivity extends AppCompatActivity {
     private Spinner stickerSpinner;
     private List<User> userList;
     private ArrayList<Sticker> stickerList;
-    //private User currentUser;
+    private User currentUser;
     private String currentUserToken;
+    private TextView username;
+    private TextView stickersSent;
 
     private StickerAdapter stickerAdapter;
 
@@ -49,8 +52,9 @@ public class CloudMsgActivity extends AppCompatActivity {
         this.stickerSpinner = (Spinner) findViewById(R.id.spinner_sticker);
         this.userList = new ArrayList<User>();
         this.stickerList = new ArrayList<Sticker>();
+        stickersSent = (TextView)findViewById(R.id.stickers_sent);
 
-        // Navigation to second fragment
+        // Send a message
         findViewById(R.id.button_testMessage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,8 +67,14 @@ public class CloudMsgActivity extends AppCompatActivity {
                 //msg.setSenderToken();
                 msg.setReceiverToken(recipient.getRegistrationToken());
                 database.child("messages").push().setValue(msg);
+
+                //TODO increment stickers sent by 1
+                currentUser.incrementStickersSent();
+                database.child("users").child(currentUserToken).setValue(currentUser);
             }
         });
+
+
 
         // TODO we should be able to nix this code; we'll only add sticker names manually from the Firebase console
         //This code looks complicated, but most of this is automatically generated methods.
@@ -73,6 +83,11 @@ public class CloudMsgActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User user = snapshot.getValue(User.class);
+                if (user.getRegistrationToken().equals(currentUserToken)) {
+                    Toast.makeText(CloudMsgActivity.this, user.getNumStickersSent().toString(), Toast.LENGTH_LONG);
+                    stickersSent.setText(String.valueOf(user.getNumStickersSent()));
+                    currentUser = user;
+                }
                 userList.add(user);
                 Log.d(TAG, "onChildAdded userList =  " + userList.size());
                 setUserSpinner();
@@ -82,6 +97,9 @@ public class CloudMsgActivity extends AppCompatActivity {
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User user = snapshot.getValue(User.class);
+                if (user.getRegistrationToken().equals(currentUserToken)) {
+                    stickersSent.setText(String.valueOf(user.getNumStickersSent()));
+                }
                 //userList.set()
             }
 

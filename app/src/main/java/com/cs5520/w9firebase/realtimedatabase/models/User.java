@@ -8,7 +8,7 @@ public class User {
     private String username;
     private String registrationToken;
     private Integer numStickersSent;
-    private ArrayList<Sticker> stickersReceived;
+    //private ArrayList<Sticker> stickersReceived;
 
     public User() {}
 
@@ -25,13 +25,13 @@ public class User {
         this.username = username;
     }
 
-    public ArrayList<Sticker> getStickersReceived() {
-        return stickersReceived;
-    }
-
-    public void setStickersReceived(ArrayList<Sticker> stickersReceived) {
-        this.stickersReceived = stickersReceived;
-    }
+//    public ArrayList<Sticker> getStickersReceived() {
+////        return stickersReceived;
+////    }
+////
+////    public void setStickersReceived(ArrayList<Sticker> stickersReceived) {
+////        this.stickersReceived = stickersReceived;
+////    }
 
     public String getRegistrationToken() {
         return registrationToken;
@@ -47,6 +47,10 @@ public class User {
 
     public void setNumStickersSent(Integer numStickersSent) {
         this.numStickersSent = numStickersSent;
+    }
+
+    public void incrementStickersSent() {
+        this.numStickersSent++;
     }
 
     @NonNull
