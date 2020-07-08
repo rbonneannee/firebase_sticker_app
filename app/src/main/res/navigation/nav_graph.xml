@@ -14,9 +14,6 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
-        <action
-            android:id="@+id/action_FirstFragment_to_cloudMsgActivity"
-            app:destination="@id/cloudMsgActivity" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -27,10 +24,21 @@
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_SecondFragment_to_cloudMsgActivity"
+            app:destination="@id/cloudMsgActivity" />
+        <action
+            android:id="@+id/action_SecondFragment_to_inboxActivity"
+            app:destination="@id/inboxActivity" />
     </fragment>
     <activity
         android:id="@+id/cloudMsgActivity"
         android:name="com.cs5520.w9firebase.CloudMsgActivity"
         android:label="activity_cloud_msg"
         tools:layout="@layout/activity_cloud_msg" />
+    <activity
+        android:id="@+id/inboxActivity"
+        android:name="com.cs5520.w9firebase.InboxActivity"
+        android:label="activity_inbox"
+        tools:layout="@layout/activity_inbox" />
 </navigation>
