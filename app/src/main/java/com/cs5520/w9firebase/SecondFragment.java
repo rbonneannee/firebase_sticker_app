@@ -39,7 +39,7 @@ public class SecondFragment extends Fragment {
             public void onClick(View view) {
 //                NavHostFragment.findNavController(SecondFragment.this)
 //                        .navigate(R.id.action_SecondFragment_to_inboxActivity);
-                Intent inbox = new Intent(getActivity(), CloudMsgActivity.class);
+                Intent inbox = new Intent(getActivity(), InboxActivity.class);
                 startActivity(inbox);
             }
         });
