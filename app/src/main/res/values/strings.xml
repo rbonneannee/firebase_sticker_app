@@ -13,4 +13,7 @@
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="fcm_message">FCM Message</string>
+
+    <string name="cloud_msg_activity_header">Send A Sticker To A Friend</string>
+
 </resources>

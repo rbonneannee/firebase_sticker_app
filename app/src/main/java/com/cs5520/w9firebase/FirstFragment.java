@@ -8,17 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.cs5520.w9firebase.realtimedatabase.models.Sticker;
 import com.cs5520.w9firebase.realtimedatabase.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -48,28 +52,51 @@ public class FirstFragment extends Fragment {
         this.mUsernameFld = view.findViewById(R.id.inputField_username);
 
         // Navigation to second fragment
-        view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-            }
-        });
-
-        // Navigation to cloud msg activity; creates/saves user to DB
-        view.findViewById(R.id.button_db_activity).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (createUser(view)) {
                     writeUser();
-//                    NavHostFragment.findNavController(FirstFragment.this)
-//                            .navigate(R.id.action_FirstFragment_to_cloudMsgActivity);
-                    Intent cloudMsg = new Intent(getActivity(), CloudMsgActivity.class);
-                    cloudMsg.putExtra("userToken", mUser.getRegistrationToken());
-                    startActivity(cloudMsg);
+                    NavHostFragment.findNavController(FirstFragment.this)
+                            .navigate(R.id.action_FirstFragment_to_SecondFragment);
                 }
             }
         });
+    }
+
+    private ArrayList<String> fetchTokens() {
+        final ArrayList<String> tokenList = new ArrayList<>();
+
+        mDatabase.child("users").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                tokenList.add(user.getRegistrationToken());
+                Log.d(TAG, "onChildAdded tokenList =  " + tokenList.size());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return tokenList;
     }
 
     /**
@@ -85,7 +112,7 @@ public class FirstFragment extends Fragment {
             Snackbar.make(v, "Error: Username cannot have whitespaces or new lines", Snackbar.LENGTH_LONG)
                     .setAction("Error", null).show();
         } else {
-            Snackbar.make(v, "Username updated " + username, Snackbar.LENGTH_LONG)
+            Snackbar.make(v, "Welcome " + username, Snackbar.LENGTH_LONG)
                     .setAction("Confirmation", null).show();
             this.mUser = new User(username);
             return true;
@@ -107,16 +134,32 @@ public class FirstFragment extends Fragment {
                 }
 
                 // Gets and displays unique app instance token
-                String token = task.getResult().getToken();
-                String msg = "InstanceID Token: " + token;
+                final String token = task.getResult().getToken();
+                final String msg = "InstanceID Token: " + token;
                 Log.d(TAG, msg);
 
-                // Update and save user to database -
-                mUser.setRegistrationToken(token);
-                mUser.setNumStickersSent(0);
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        // User already exists
+                        if (snapshot.child("users").hasChild(token)) {
+                            // Update user's username
+                            mDatabase.child("users").child(token).child("username")
+                                    .setValue(mUser.getUsername());
+                        }
+                        // User does not exist yet
+                        else {
+                            mUser.setRegistrationToken(token);
+                            mUser.setNumStickersSent(0);
+                            mDatabase.child("users").child(token).setValue(mUser);
+                        }
+                    }
 
-                // users are identified by token
-                mDatabase.child("users").child(mUser.getRegistrationToken()).setValue(mUser);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
     }
