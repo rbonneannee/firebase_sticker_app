@@ -7,17 +7,7 @@
         android:id="@+id/image_view_sticker"
         android:layout_width="150dp"
         android:layout_height="100dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/noun_turtle" />
-
-    <TextView
-        android:id="@+id/text_view_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/image_view_sticker"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/image_view_sticker"
-        android:gravity="center"
-        android:text="Ice Cream"
-        android:textColor="@android:color/black" />
 
 </RelativeLayout>
