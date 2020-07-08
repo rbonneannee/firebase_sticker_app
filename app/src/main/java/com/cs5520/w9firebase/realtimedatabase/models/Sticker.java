@@ -2,25 +2,21 @@ package com.cs5520.w9firebase.realtimedatabase.models;
 
 import android.graphics.drawable.Icon;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 
+// TODO update rules so that sticker collection can't be edited
 public class Sticker {
 
-    private Icon icon;
     private String stickerName;
-    private User sender;
-    private Date dateSent;
+    private int stickerImageResId;
 
-    public Sticker(){
-        this.dateSent = new Date();
-    }
+    public Sticker(){}
 
-    public Icon getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Icon icon) {
-        this.icon = icon;
+    public Sticker(String stickerName, int stickerImageResId) {
+        this.stickerName = stickerName;
+        this.stickerImageResId = stickerImageResId;
     }
 
     public String getStickerName() {
@@ -31,19 +27,17 @@ public class Sticker {
         this.stickerName = stickerName;
     }
 
-    public User getSender() {
-        return sender;
+    public int getStickerImageResId() {
+        return stickerImageResId;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setStickerImageResId(int stickerImageResId) {
+        this.stickerImageResId = stickerImageResId;
     }
 
-    public Date getDateSent() {
-        return dateSent;
-    }
-
-    public void setDateSent(Date dateSent) {
-        this.dateSent = dateSent;
+    @NonNull
+    @Override
+    public String toString() {
+        return this.stickerName;
     }
 }

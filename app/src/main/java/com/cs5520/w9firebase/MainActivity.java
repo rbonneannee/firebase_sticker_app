@@ -1,5 +1,12 @@
 package com.cs5520.w9firebase;
 
+// TODO merge this branch back into origin/Rebecca before origin/master
+// TODO clean up all the ugly
+// TODO use more than one thread
+// TODO figure out how to work with lists in DB and how to structure (preserving order when displayed)
+// TODO update firebase cloud functions (maybe node) to latest; node 8 is deprecated
+// TODO figure out why app is crashing on my phone during first open (memory?)
+
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
