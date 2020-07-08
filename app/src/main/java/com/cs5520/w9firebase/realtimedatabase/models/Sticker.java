@@ -8,17 +8,14 @@ import java.util.Date;
 
 public class Sticker {
 
-    private Icon icon;
     private String stickerName;
+    private int stickerImageResId;
 
     public Sticker(){}
 
-    public Icon getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Icon icon) {
-        this.icon = icon;
+    public Sticker(String stickerName, int stickerImageResId) {
+        this.stickerName = stickerName;
+        this.stickerImageResId = stickerImageResId;
     }
 
     public String getStickerName() {
@@ -27,6 +24,14 @@ public class Sticker {
 
     public void setStickerName(String stickerName) {
         this.stickerName = stickerName;
+    }
+
+    public int getStickerImageResId() {
+        return stickerImageResId;
+    }
+
+    public void setStickerImageResId(int stickerImageResId) {
+        this.stickerImageResId = stickerImageResId;
     }
 
     @NonNull

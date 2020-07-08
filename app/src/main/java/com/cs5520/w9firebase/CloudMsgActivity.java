@@ -13,13 +13,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cs5520.w9firebase.realtimedatabase.models.Sticker;
+import com.cs5520.w9firebase.realtimedatabase.models.StickerAdapter;
 import com.cs5520.w9firebase.realtimedatabase.models.User;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,27 +31,22 @@ public class CloudMsgActivity extends AppCompatActivity {
     private Spinner userSpinner;
     private Spinner stickerSpinner;
     private List<User> userList;
-    private List<Sticker> stickerList;
+    private ArrayList<Sticker> stickerList;
+
+    private StickerAdapter stickerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloud_msg);
-
-        // TODO: this.database gets reinitialized - Remove 1 (likely the first one) -
-        this.database = FirebaseDatabase.getInstance().getReference().child("users");
-        database = FirebaseDatabase.getInstance().getReference();
-        //DatabaseReference userRef = database.getReference("users");
+        
+        this.database = FirebaseDatabase.getInstance().getReference();
 
         this.userSpinner = (Spinner) findViewById(R.id.spinner_user);
         this.stickerSpinner = (Spinner) findViewById(R.id.spinner_sticker);
         this.userList = new ArrayList<User>();
         this.stickerList = new ArrayList<Sticker>();
-
-
-        Log.d(TAG, "Initialization: userlist =  " + userList.size());
-
-
+        
         //This code looks complicated, but most of this is automatically generated methods.
         //Look at Line 61 of RealTimeDatabaseActivity in the Professor's firebase demo
         database.child("users").addChildEventListener(new ChildEventListener() {
@@ -86,29 +81,29 @@ public class CloudMsgActivity extends AppCompatActivity {
                 Log.e(TAG, "onCancelled:" + error);
             }
         });
-
-
-
-//        User u0 = new User("Andrea");
-//        u0.setRegistrationToken("regA");
-//        User u1 = new User("Bebe");
-//        u1.setRegistrationToken("regB");
-//        User u2 = new User("Carmen");
-//        u2.setRegistrationToken("regC");
-//        User u3 = new User("Damien");
-//        u3.setRegistrationToken("regD");
-//        userList.add(u0);
-//        userList.add(u1);
-//        userList.add(u2);
-//        userList.add(u3);
-
-        // TODO: Replace hardcoded stickers with stickers in database
+        
         database.child("stickers").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Sticker sticker = snapshot.getValue(Sticker.class);
+
+                // Update Sticker object with corresponding drawable
+                switch (sticker.getStickerName()) {
+                    case "ice cream":
+                        sticker.setStickerImageResId(R.drawable.noun_ice_cream);
+                        break;
+                    case "truck":
+                        sticker.setStickerImageResId(R.drawable.noun_truck);
+                        break;
+                    case "smile":
+                        sticker.setStickerImageResId(R.drawable.noun_smile);
+                        break;
+                    case "turtle":
+                        sticker.setStickerImageResId(R.drawable.noun_turtle);
+                        break;
+                }
+
                 stickerList.add(sticker);
-                Log.d(TAG, "Inside Sticker's onChildAdded: userlist =  " + userList.size());
                 setStickerSpinner();
             }
 
@@ -136,23 +131,7 @@ public class CloudMsgActivity extends AppCompatActivity {
             }
         });
 
-//        Sticker s0 = new Sticker();
-//        s0.setStickerName("doll");
-//        Sticker s1 = new Sticker();
-//        s1.setStickerName("balloon");
-//        Sticker s2 = new Sticker();
-//        s2.setStickerName("smile");
-//        Sticker s3 = new Sticker();
-//        s3.setStickerName("rain cloud");
-//        stickerList.add(s0);
-//        stickerList.add(s1);
-//        stickerList.add(s2);
-//        stickerList.add(s3);
-
-        //TODO: Set default spinner value. Currently they start blank
-        Log.d(TAG, "Before setUserSpinner: userList =  " + userList.size());
         setUserSpinner();
-        Log.d(TAG, "After setUserSpinner: userList =  " + userList.size());
         setStickerSpinner();
 
 
@@ -182,8 +161,6 @@ public class CloudMsgActivity extends AppCompatActivity {
         });
 */
     }
-
-
 
     // TODO: Low priority - Create one setSpinner method that can handle both User and
     //  Sticker objects
@@ -218,7 +195,6 @@ public class CloudMsgActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-
             }
         });
     }
@@ -240,6 +216,23 @@ public class CloudMsgActivity extends AppCompatActivity {
 
     // FOR STICKER SPINNER
     private void setStickerSpinner() {
+        this.stickerAdapter = new StickerAdapter(this, this.stickerList);
+        this.stickerSpinner.setAdapter(stickerAdapter);
+        this.stickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Sticker sticker = (Sticker) parent.getSelectedItem();
+                displayStickerData(sticker);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void originalSetStickerSpinner() {
 
         // Create an ArrayAdapter using the User array and a default spinner layout
         ArrayAdapter<Sticker> adapter = new ArrayAdapter<Sticker>(this, android.R.layout.simple_spinner_item, stickerList);
@@ -275,6 +268,4 @@ public class CloudMsgActivity extends AppCompatActivity {
         Sticker sticker = (Sticker) stickerSpinner.getSelectedItem();
         displayStickerData(sticker);
     }
-
-
 }
