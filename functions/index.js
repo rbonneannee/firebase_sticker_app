@@ -33,7 +33,8 @@ exports.sendMessageNotification = functions.database.ref('/messages/{messageUid}
           title: `You got a sticker from ${senderUsername}!`
         },
         data: {
-          sticker: `${message.stickerName}`
+          stickerName: `${message.stickerName}`,
+          receiverToken: `${message.receiverToken}`
         }
       };
       functions.logger.log('LOGGER payload: ', payload);
