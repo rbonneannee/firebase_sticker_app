@@ -1,5 +1,6 @@
 package com.cs5520.w9firebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,16 +37,20 @@ public class SecondFragment extends Fragment {
         view.findViewById(R.id.button_inbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_inboxActivity);
+//                NavHostFragment.findNavController(SecondFragment.this)
+//                        .navigate(R.id.action_SecondFragment_to_inboxActivity);
+                Intent inbox = new Intent(getActivity(), CloudMsgActivity.class);
+                startActivity(inbox);
             }
         });
 
         view.findViewById(R.id.button_compose).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_cloudMsgActivity);
+//                NavHostFragment.findNavController(SecondFragment.this)
+//                        .navigate(R.id.action_SecondFragment_to_cloudMsgActivity);
+                Intent cloudMsg = new Intent(getActivity(), CloudMsgActivity.class);
+                startActivity(cloudMsg);
             }
         });
     }
