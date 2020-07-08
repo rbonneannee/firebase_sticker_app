@@ -8,7 +8,6 @@ public class User {
     private String username;
     private String registrationToken;
     private Integer numStickersSent;
-
     private ArrayList<String> stickersReceived;
 
     public User() {}

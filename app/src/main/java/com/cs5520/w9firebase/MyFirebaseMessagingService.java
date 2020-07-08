@@ -8,13 +8,17 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
-import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -22,15 +26,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+
+        // Get map of data from the remoteMessage
+        // Get the stickerName from the remoteMessage
+        // Get the receiverToken from the remoteMessage
+        // Get reference to database
+        // Push the new stickerName onto /users/receiverToken/stickersReceived
+
+        // TODO put in error and null checking
+        Map<String, String> data = remoteMessage.getData();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        String stickerName = data.get("stickerName");
+        String receiverToken = data.get("receiverToken");
+        databaseReference
+                .child("users/" + receiverToken + "/stickersReceived")
+                .push()
+                .setValue(stickerName);
     }
 
     private void sendNotification(String messageBody) {

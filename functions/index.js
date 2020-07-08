@@ -17,22 +17,32 @@ exports.sendMessageNotification = functions.database.ref('/messages/{messageUid}
       const messageUid = context.params.messageUid;
       functions.logger.log('LOGGER messageUid: ', messageUid);
 
-      const snapshot = await admin.database()
-        .ref(`/messages/${messageUid}/receiverToken`)
+      const messageSnapshot = await admin.database()
+        .ref(`/messages/${messageUid}`)
         .once('value');
+      const message = messageSnapshot.val();
+      functions.logger.log('LOGGER message: ', message);
 
-      const receiverToken = snapshot.val();
-      functions.logger.log('LOGGER receiverToken: ', receiverToken);
+      const senderUsernameSnapshot = await admin.database()
+        .ref(`/users/${message.senderToken}/username`)
+        .once('value');
+      const senderUsername = senderUsernameSnapshot.val();
 
       const payload = {
         notification: {
-          title: 'You got a sticker!'
+          title: `You got a sticker from ${senderUsername}!`
         },
         data: {
-          foo: "This is dummy data at the foo key."
+          stickerName: `${message.stickerName}`,
+          receiverToken: `${message.receiverToken}`
         }
       };
       functions.logger.log('LOGGER payload: ', payload);
 
-      admin.messaging().sendToDevice(receiverToken, payload);
+      const options = {
+        priority: 'high',
+        timeToLive: 60 * 60 * 24
+      }
+
+      admin.messaging().sendToDevice(message.receiverToken, payload, options);
     });

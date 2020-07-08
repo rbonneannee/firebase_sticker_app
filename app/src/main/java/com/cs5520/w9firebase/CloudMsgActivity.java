@@ -52,7 +52,7 @@ public class CloudMsgActivity extends AppCompatActivity {
         this.stickerSpinner = (Spinner) findViewById(R.id.spinner_sticker);
         this.userList = new ArrayList<User>();
         this.stickerList = new ArrayList<Sticker>();
-        stickersSent = (TextView)findViewById(R.id.stickers_sent);
+        stickersSent = (TextView) findViewById(R.id.stickers_sent);
 
 
         // Send message
@@ -60,14 +60,10 @@ public class CloudMsgActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Message msg = new Message();
-                Sticker message = (Sticker)stickerSpinner.getSelectedItem();
-                User recipient = (User)userSpinner.getSelectedItem();
+                Sticker message = (Sticker) stickerSpinner.getSelectedItem();
+                User recipient = (User) userSpinner.getSelectedItem();
                 msg.setBody(message.getStickerName());
-                //msg.setSenderToken("f1SGFKfeQsecNL6i8Hkvt_:APA91bGymszYD2WzLoDGsLa6W82zlDVAjc39" +
-                // "kyrz87krV6a8F9HBMdFFYxpo0eFatqt3MSUxC1yIw1Z8teoixe5JMxcxPGtsLkyWONuIbp5E9jAtM" +
-                // "wPv4jEB5iUOCwb2Kfi9yStAjOFO");
                 msg.setSenderToken(currentUserToken);
-                //msg.setSenderToken();
                 msg.setReceiverToken(recipient.getRegistrationToken());
                 database.child("messages").push().setValue(msg);
 
@@ -79,9 +75,8 @@ public class CloudMsgActivity extends AppCompatActivity {
             }
         });
 
-
-
-        // TODO we should be able to nix this code; we'll only add sticker names manually from the Firebase console
+        // TODO use ArrayAdapter.notifyDataSetChanged() instead of creating new instances
+        // TODO for readability, make a separate class implementing ChildEventListener
         // Listeners for changes in "users" branch of database
         database.child("users").addChildEventListener(new ChildEventListener() {
             @Override
@@ -97,14 +92,12 @@ public class CloudMsgActivity extends AppCompatActivity {
                 setUserSpinner();
             }
 
-            //TODO: Find some way to find index. Updating currently not implemented
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User user = snapshot.getValue(User.class);
                 if (user.getRegistrationToken().equals(currentUserToken)) {
                     stickersSent.setText(String.valueOf(user.getNumStickersSent()));
                 }
-                //userList.set()
             }
 
             @Override
@@ -115,7 +108,7 @@ public class CloudMsgActivity extends AppCompatActivity {
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                // No action
             }
 
             @Override
@@ -150,16 +143,14 @@ public class CloudMsgActivity extends AppCompatActivity {
                 setStickerSpinner();
             }
 
-            //TODO: Find some way to find index. Updating currently not implemented
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Sticker sticker = snapshot.getValue(Sticker.class);
-                //stickerList.set(sticker);
+                // No action
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                // No action
             }
 
             @Override
@@ -180,13 +171,11 @@ public class CloudMsgActivity extends AppCompatActivity {
 
     private void confirmSent() {
         String confirm = "You sent a " + getSelectedSticker().getStickerName() + " sticker to " +
-                getSelectedUser().getUsername() +"!";
+                getSelectedUser().getUsername() + "!";
         Toast.makeText(this, confirm, Toast.LENGTH_LONG).show();
     }
 
-    // TODO: Low priority - Create one setSpinner method that can handle both User and
-    //  Sticker objects
-    // FOR USER SPINNER
+    // TODO make a higher-order function to lift up what's common between the set spinner methods
     private void setUserSpinner() {
         Log.d(TAG, "IN setUserSpinner: userList =  " + userList.size());
 
@@ -208,7 +197,7 @@ public class CloudMsgActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // No action
             }
         });
     }
@@ -227,7 +216,6 @@ public class CloudMsgActivity extends AppCompatActivity {
         Log.d(TAG, data);
     }
 
-    // FOR STICKER SPINNER
     private void setStickerSpinner() {
         this.stickerAdapter = new StickerSpinnerAdapter(this, this.stickerList);
         this.stickerSpinner.setAdapter(stickerAdapter);
@@ -240,7 +228,7 @@ public class CloudMsgActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // No action
             }
         });
     }
