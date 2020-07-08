@@ -8,7 +8,7 @@ public class User {
     private String username;
     private String registrationToken;
     private Integer numStickersSent;
-    private ArrayList<Sticker> stickersReceived;
+    private ArrayList<String> stickersReceived;
 
     public User() {}
 
@@ -25,11 +25,11 @@ public class User {
         this.username = username;
     }
 
-    public ArrayList<Sticker> getStickersReceived() {
+    public ArrayList<String> getStickersReceived() {
         return stickersReceived;
     }
 
-    public void setStickersReceived(ArrayList<Sticker> stickersReceived) {
+    public void setStickersReceived(ArrayList<String> stickersReceived) {
         this.stickersReceived = stickersReceived;
     }
 
