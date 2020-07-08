@@ -23,6 +23,7 @@ import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 
+// TODO do some work on other threads
 public class FirstFragment extends Fragment {
 
     private static final String TAG = FirstFragment.class.getSimpleName();

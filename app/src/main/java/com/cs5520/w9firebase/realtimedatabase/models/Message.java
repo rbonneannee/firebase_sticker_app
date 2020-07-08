@@ -2,39 +2,31 @@ package com.cs5520.w9firebase.realtimedatabase.models;
 
 public class Message {
 
-    private User sender;
-    private User recipient;
-    private String title;
+    private String senderToken;
+    private String receiverToken;
     private String body;
 
-    public Message() {}
-
-    public User getSender() {
-        return sender;
+    public Message() {
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public String getSenderToken() {
+        return senderToken;
     }
 
-    public User getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(User recipient) {
-        this.recipient = recipient;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public String getReceiverToken() {
+        return receiverToken;
     }
 
     public String getBody() {
         return body;
+    }
+
+    public void setSenderToken(String senderToken) {
+        this.senderToken = senderToken;
+    }
+
+    public void setReceiverToken(String receiverToken) {
+        this.receiverToken = receiverToken;
     }
 
     public void setBody(String body) {

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Date;
 
+// TODO update rules so that sticker collection can't be edited
 public class Sticker {
 
     private String stickerName;

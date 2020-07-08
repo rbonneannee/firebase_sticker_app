@@ -1,9 +1,5 @@
 package com.cs5520.w9firebase;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +8,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.cs5520.w9firebase.realtimedatabase.models.Message;
 import com.cs5520.w9firebase.realtimedatabase.models.Sticker;
 import com.cs5520.w9firebase.realtimedatabase.models.StickerAdapter;
 import com.cs5520.w9firebase.realtimedatabase.models.User;
@@ -39,14 +40,28 @@ public class CloudMsgActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloud_msg);
-        
+
         this.database = FirebaseDatabase.getInstance().getReference();
 
         this.userSpinner = (Spinner) findViewById(R.id.spinner_user);
         this.stickerSpinner = (Spinner) findViewById(R.id.spinner_sticker);
         this.userList = new ArrayList<User>();
         this.stickerList = new ArrayList<Sticker>();
-        
+
+        // Navigation to second fragment
+        findViewById(R.id.button_testMessage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                Message msg = new Message();
+                msg.setBody("body");
+                msg.setReceiverToken("receiverToken");
+                msg.setSenderToken("senderToken");
+                databaseReference.child("messages").push().setValue(msg);
+            }
+        });
+
+        // TODO we should be able to nix this code; we'll only add sticker names manually from the Firebase console
         //This code looks complicated, but most of this is automatically generated methods.
         //Look at Line 61 of RealTimeDatabaseActivity in the Professor's firebase demo
         database.child("users").addChildEventListener(new ChildEventListener() {
@@ -81,7 +96,7 @@ public class CloudMsgActivity extends AppCompatActivity {
                 Log.e(TAG, "onCancelled:" + error);
             }
         });
-        
+
         database.child("stickers").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
