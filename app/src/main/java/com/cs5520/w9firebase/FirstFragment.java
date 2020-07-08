@@ -3,6 +3,7 @@ package com.cs5520.w9firebase;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,22 @@ public class FirstFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
         this.mUsernameFld = view.findViewById(R.id.inputField_username);
+
+        mUsernameFld.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (createUser(view)) {
+                        writeUser();
+                        NavHostFragment.findNavController(FirstFragment.this)
+                                .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+        });
 
         // Navigation to second fragment
         view.findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
