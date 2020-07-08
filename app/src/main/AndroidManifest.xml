@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".InboxActivity"></activity>
         <activity android:name=".CloudMsgActivity" />
         <activity android:name=".realtimedatabase.DatabaseActivity" />
         <activity
