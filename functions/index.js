@@ -15,24 +15,21 @@ exports.sendMessageNotification = functions.database.ref('/messages/{messageUid}
   .onWrite(
     async (change, context) => {
       const messageUid = context.params.messageUid;
-
       functions.logger.log('LOGGER messageUid: ', messageUid);
-      let receiverToken;
-      const stupidPromise = admin.database()
-        .ref(`/messages/${messageUid}/receiverToken`)
-        .once('value')
-        .then((snapshot) => {
-          functions.logger.log('LOGGER snapshot: ', snapshot);
-          receiverToken = snapshot.val();
-          return snapshot.val(); // Super misleading - `.then()` returns a Promise
-        });
 
-      // TODO figure out if it's a problem with this or the deprecated getToken()
+      const snapshot = await admin.database()
+        .ref(`/messages/${messageUid}/receiverToken`)
+        .once('value');
+
+      const receiverToken = snapshot.val();
       functions.logger.log('LOGGER receiverToken: ', receiverToken);
 
       const payload = {
         notification: {
           title: 'You got a sticker!'
+        },
+        data: {
+          foo: "This is dummy data at the foo key."
         }
       };
       functions.logger.log('LOGGER payload: ', payload);
