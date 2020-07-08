@@ -23,7 +23,7 @@ import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 
-// TODO do some work on other threads
+// TODO do some work on other threads (call getToken from another thread, bc it's blocking)
 public class FirstFragment extends Fragment {
 
     private static final String TAG = FirstFragment.class.getSimpleName();
@@ -93,6 +93,7 @@ public class FirstFragment extends Fragment {
      * Saves user to database.
      */
     private void writeUser() {
+        // TODO move to another thread?
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {

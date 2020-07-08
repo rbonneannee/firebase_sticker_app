@@ -52,12 +52,11 @@ public class CloudMsgActivity extends AppCompatActivity {
         findViewById(R.id.button_testMessage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 Message msg = new Message();
                 msg.setBody("body");
-                msg.setReceiverToken("receiverToken");
-                msg.setSenderToken("senderToken");
-                databaseReference.child("messages").push().setValue(msg);
+                msg.setReceiverToken("dP_E6WIyTy6-nfg8w2V32p:APA91bFARitbdoBxyqEuReMctNKD4zRKI3g3PwVekPueDt3OQNjbIJX25vv2lEzfu6KFJ-tttXTrtrR_cK-wcqSGHiJoleaRgmsNRuOSyGkeiyionWQT9nLaDi6s35h881MDj5aEm0pb");
+                msg.setSenderToken("f1SGFKfeQsecNL6i8Hkvt_:APA91bGymszYD2WzLoDGsLa6W82zlDVAjc39kyrz87krV6a8F9HBMdFFYxpo0eFatqt3MSUxC1yIw1Z8teoixe5JMxcxPGtsLkyWONuIbp5E9jAtMwPv4jEB5iUOCwb2Kfi9yStAjOFO");
+                database.child("messages").push().setValue(msg);
             }
         });
 
