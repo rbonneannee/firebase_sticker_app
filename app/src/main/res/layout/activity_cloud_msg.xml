@@ -10,7 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cloudMsg_activity"
+        android:text="@string/cloud_msg_activity_header"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -43,8 +43,8 @@
 
     <Spinner
         android:id="@+id/spinner_sticker"
-        android:layout_width="362dp"
-        android:layout_height="41dp"
+        android:layout_width="363dp"
+        android:layout_height="74dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.489"

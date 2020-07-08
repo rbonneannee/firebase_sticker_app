@@ -1,5 +1,6 @@
 package com.cs5520.w9firebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.cs5520.w9firebase.realtimedatabase.models.User;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+
 public class SecondFragment extends Fragment {
+
+    private static final String TAG = SecondFragment.class.getSimpleName();
+
+    private DatabaseReference mDatabase;
+    private TextInputEditText mUsernameFld;
+    private User mUser;
 
     @Override
     public View onCreateView(
@@ -23,11 +34,23 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.button_inbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+//                NavHostFragment.findNavController(SecondFragment.this)
+//                        .navigate(R.id.action_SecondFragment_to_inboxActivity);
+                Intent inbox = new Intent(getActivity(), CloudMsgActivity.class);
+                startActivity(inbox);
+            }
+        });
+
+        view.findViewById(R.id.button_compose).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                NavHostFragment.findNavController(SecondFragment.this)
+//                        .navigate(R.id.action_SecondFragment_to_cloudMsgActivity);
+                Intent cloudMsg = new Intent(getActivity(), CloudMsgActivity.class);
+                startActivity(cloudMsg);
             }
         });
     }
