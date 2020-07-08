@@ -54,7 +54,8 @@ public class CloudMsgActivity extends AppCompatActivity {
         this.stickerList = new ArrayList<Sticker>();
         stickersSent = (TextView)findViewById(R.id.stickers_sent);
 
-        // Send a message
+
+        // Send message
         findViewById(R.id.button_testMessage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,7 +63,9 @@ public class CloudMsgActivity extends AppCompatActivity {
                 Sticker message = (Sticker)stickerSpinner.getSelectedItem();
                 User recipient = (User)userSpinner.getSelectedItem();
                 msg.setBody(message.getStickerName());
-                //msg.setSenderToken("f1SGFKfeQsecNL6i8Hkvt_:APA91bGymszYD2WzLoDGsLa6W82zlDVAjc39kyrz87krV6a8F9HBMdFFYxpo0eFatqt3MSUxC1yIw1Z8teoixe5JMxcxPGtsLkyWONuIbp5E9jAtMwPv4jEB5iUOCwb2Kfi9yStAjOFO");
+                //msg.setSenderToken("f1SGFKfeQsecNL6i8Hkvt_:APA91bGymszYD2WzLoDGsLa6W82zlDVAjc39" +
+                // "kyrz87krV6a8F9HBMdFFYxpo0eFatqt3MSUxC1yIw1Z8teoixe5JMxcxPGtsLkyWONuIbp5E9jAtM" +
+                // "wPv4jEB5iUOCwb2Kfi9yStAjOFO");
                 msg.setSenderToken(currentUserToken);
                 //msg.setSenderToken();
                 msg.setReceiverToken(recipient.getRegistrationToken());
@@ -71,14 +74,15 @@ public class CloudMsgActivity extends AppCompatActivity {
                 //TODO increment stickers sent by 1
                 currentUser.incrementStickersSent();
                 database.child("users").child(currentUserToken).setValue(currentUser);
+
+                confirmSent();
             }
         });
 
 
 
         // TODO we should be able to nix this code; we'll only add sticker names manually from the Firebase console
-        //This code looks complicated, but most of this is automatically generated methods.
-        //Look at Line 61 of RealTimeDatabaseActivity in the Professor's firebase demo
+        // Listeners for changes in "users" branch of database
         database.child("users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -120,6 +124,7 @@ public class CloudMsgActivity extends AppCompatActivity {
             }
         });
 
+        // Listeners for changes in "stickers" branch of database
         database.child("stickers").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -171,33 +176,12 @@ public class CloudMsgActivity extends AppCompatActivity {
 
         setUserSpinner();
         setStickerSpinner();
+    }
 
-
- /*
-        // Process to get application's unique Firebase instance token
-        Button button_getToken = (Button) findViewById(R.id.button_getToken);
-        button_getToken.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseInstanceId.getInstance().getInstanceId()
-                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                if(!task.isSuccessful()) {
-                                    Log.w(TAG, "getInstanceID failed", task.getException());
-                                    return;
-                                }
-
-                                // Gets and displays unique app instance token
-                                String token = task.getResult().getToken();
-                                String msg = "InstanceID Token: " + token;
-                                Log.d(TAG, msg);
-                                Toast.makeText(CloudMsgActivity.this, msg, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
-*/
+    private void confirmSent() {
+        String confirm = "You sent a " + getSelectedSticker().getStickerName() + " sticker to " +
+                getSelectedUser().getUsername() +"!";
+        Toast.makeText(this, confirm, Toast.LENGTH_LONG).show();
     }
 
     // TODO: Low priority - Create one setSpinner method that can handle both User and
@@ -215,14 +199,6 @@ public class CloudMsgActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         userSpinner.setAdapter(adapter);
 
-        if (userList.size() == 0) {
-            Log.d(TAG, "userList is empty =  " + userList.size());
-        }
-
-        for (User user : userList) {
-            Log.d(TAG, "here" + user.toString());
-        }
-
         userSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -237,9 +213,8 @@ public class CloudMsgActivity extends AppCompatActivity {
         });
     }
 
-    public void getSelectedUser(View v) {
-        User user = (User) userSpinner.getSelectedItem();
-        displayUserData(user);
+    public User getSelectedUser() {
+        return (User) userSpinner.getSelectedItem();
     }
 
     private void displayUserData(User user) {
@@ -249,7 +224,7 @@ public class CloudMsgActivity extends AppCompatActivity {
 
         String data = "Username: " + username + "\nToken: " + regToken + "\n# Stickers Sent: "
                 + numStickersSent;
-        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+        Log.d(TAG, data);
     }
 
     // FOR STICKER SPINNER
@@ -270,40 +245,13 @@ public class CloudMsgActivity extends AppCompatActivity {
         });
     }
 
-    private void originalSetStickerSpinner() {
-
-        // Create an ArrayAdapter using the User array and a default spinner layout
-        ArrayAdapter<Sticker> adapter = new ArrayAdapter<Sticker>(this, android.R.layout.simple_spinner_item, stickerList);
-
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Apply the adapter to the spinner
-        stickerSpinner.setAdapter(adapter);
-
-        stickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Sticker sticker = (Sticker) parent.getSelectedItem();
-                displayStickerData(sticker);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
     private void displayStickerData(Sticker sticker) {
         String stickerName = sticker.getStickerName();
-
         String data = "Sticker: " + stickerName;
-        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+        Log.d(TAG, data);
     }
 
-    public void getSelectedSticker(View v) {
-        Sticker sticker = (Sticker) stickerSpinner.getSelectedItem();
-        displayStickerData(sticker);
+    public Sticker getSelectedSticker() {
+        return (Sticker) stickerSpinner.getSelectedItem();
     }
 }

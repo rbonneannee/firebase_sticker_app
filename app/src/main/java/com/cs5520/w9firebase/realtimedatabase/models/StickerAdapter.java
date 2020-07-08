@@ -40,13 +40,13 @@ public class StickerAdapter extends ArrayAdapter<Sticker> {
         }
 
         ImageView imageViewSticker = convertView.findViewById(R.id.image_view_sticker);
-        TextView textViewName = convertView.findViewById(R.id.text_view_name);
+        // TextView textViewName = convertView.findViewById(R.id.text_view_name);
 
         Sticker currentSticker = getItem(position);
 
         if (currentSticker != null) {
             imageViewSticker.setImageResource(currentSticker.getStickerImageResId());
-            textViewName.setText(currentSticker.getStickerName());
+            // textViewName.setText(currentSticker.getStickerName());
         }
         return convertView;
     }
