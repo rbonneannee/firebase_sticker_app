@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cs5520.w9firebase.realtimedatabase.models.Message;
 import com.cs5520.w9firebase.realtimedatabase.models.Sticker;
-import com.cs5520.w9firebase.realtimedatabase.models.StickerAdapter;
+import com.cs5520.w9firebase.realtimedatabase.models.StickerSpinnerAdapter;
 import com.cs5520.w9firebase.realtimedatabase.models.User;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +39,7 @@ public class CloudMsgActivity extends AppCompatActivity {
     private TextView username;
     private TextView stickersSent;
 
-    private StickerAdapter stickerAdapter;
+    private StickerSpinnerAdapter stickerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,7 +217,7 @@ public class CloudMsgActivity extends AppCompatActivity {
     }
 
     private void setStickerSpinner() {
-        this.stickerAdapter = new StickerAdapter(this, this.stickerList);
+        this.stickerAdapter = new StickerSpinnerAdapter(this, this.stickerList);
         this.stickerSpinner.setAdapter(stickerAdapter);
         this.stickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

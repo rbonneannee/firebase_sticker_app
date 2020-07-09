@@ -15,9 +15,9 @@ import com.cs5520.w9firebase.R;
 
 import java.util.ArrayList;
 
-public class StickerAdapter extends ArrayAdapter<Sticker> {
+public class StickerSpinnerAdapter extends ArrayAdapter<Sticker> {
 
-    public StickerAdapter(Context context, ArrayList<Sticker> stickerList) {
+    public StickerSpinnerAdapter(Context context, ArrayList<Sticker> stickerList) {
         super(context, 0, stickerList);
     }
 

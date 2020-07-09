@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--https://github.com/mitchtabian/ListViews/blob/master/ListAdapter_WithImages/ListAdapter/app/src/main/res/anim/load_down_anim.xml-->
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    android:shareInterpolator="@android:anim/decelerate_interpolator">
+    <translate
+        android:fromXDelta="0%" android:toXDelta="0%"
+        android:fromYDelta="100%" android:toYDelta="0%"
+        android:duration="400" />
+</set>
