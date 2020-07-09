@@ -44,10 +44,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String stickerName = data.get("stickerName");
         String receiverToken = data.get("receiverToken");
-        databaseReference
+        // TODO undo block comment, possibly
+        /*databaseReference
                 .child("users/" + receiverToken + "/stickersReceived")
                 .push()
                 .setValue(stickerName);
+
+         */
     }
 
     private void sendNotification(String messageBody) {

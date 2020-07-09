@@ -71,6 +71,7 @@ public class CloudMsgActivity extends AppCompatActivity {
                 currentUser.incrementStickersSent();
                 database.child("users").child(currentUserToken).setValue(currentUser);
 
+
                 confirmSent();
             }
         });

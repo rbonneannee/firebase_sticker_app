@@ -1,17 +1,17 @@
 package com.cs5520.w9firebase;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.cs5520.w9firebase.realtimedatabase.models.Message;
 import com.cs5520.w9firebase.realtimedatabase.models.Sticker;
 import com.cs5520.w9firebase.realtimedatabase.models.StickerListAdapter;
-import com.cs5520.w9firebase.realtimedatabase.models.User;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,8 +57,56 @@ public class InboxActivity extends AppCompatActivity {
 
         this.stickerObjList = new ArrayList<Sticker>();
 
-        stickerReceivedListener();
+       // stickerReceivedListener();
+        messageReceivedListener();
     }
+
+    private void messageReceivedListener() {
+        this.databaseReference.child("messages").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Message message = snapshot.getValue(Message.class);
+                if (message.getReceiverToken().equals(currentUserToken)) {
+                    String stickerName = message.getBody();
+                    stickerNameList.add(stickerName);
+                    Log.d(TAG, "Sticker name: " + stickerName);
+                    Log.d(TAG, "StickerList ct: " + stickerNameList.size());
+
+                    stickerObjList.add(createSticker(stickerName));
+                    displayStickers();
+                } else {
+                    Log.d(TAG, "Inbox | recipient" + message.getReceiverToken());
+                    Log.d(TAG, "Inbox | currentUser  " + currentUserToken);
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
+
+
 
     private void stickerReceivedListener() {
         this.databaseReference.child("users").child(currentUserToken).child("stickersReceived")
@@ -128,13 +176,6 @@ public class InboxActivity extends AppCompatActivity {
         // KEEP
         this.stickerListAdapter = new StickerListAdapter(this, R.layout.adapter_image_listview, stickerObjList);
         this.stickersListView.setAdapter(stickerListAdapter);
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
 
     }
 }
