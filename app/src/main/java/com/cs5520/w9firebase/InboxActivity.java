@@ -179,11 +179,4 @@ public class InboxActivity extends AppCompatActivity {
         this.stickersListView.setAdapter(stickerListAdapter);
 
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-
-    }
 }
