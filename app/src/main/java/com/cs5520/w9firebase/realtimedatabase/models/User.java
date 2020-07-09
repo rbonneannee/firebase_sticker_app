@@ -3,16 +3,20 @@ package com.cs5520.w9firebase.realtimedatabase.models;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class User {
     private String username;
     private String registrationToken;
     private Integer numStickersSent;
-    private ArrayList<String> stickersReceived;
+    private HashMap<String, String> stickersReceived;
 
-    public User() {}
+    public User() {
+        stickersReceived = new HashMap<>();
+    }
 
     public User(String username) {
+        this();
         this.username = username;
         this.numStickersSent = 0;
     }
@@ -25,11 +29,11 @@ public class User {
         this.username = username;
     }
 
-    public ArrayList<String> getStickersReceived() {
+    public HashMap<String, String> getStickersReceived() {
         return stickersReceived;
     }
 
-    public void setStickersReceived(ArrayList<String> stickersReceived) {
+    public void setStickersReceived(HashMap<String, String> stickersReceived) {
         this.stickersReceived = stickersReceived;
     }
 
