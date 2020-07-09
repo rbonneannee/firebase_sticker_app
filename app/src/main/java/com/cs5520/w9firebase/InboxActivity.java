@@ -1,18 +1,17 @@
 package com.cs5520.w9firebase;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cs5520.w9firebase.realtimedatabase.models.Message;
 import com.cs5520.w9firebase.realtimedatabase.models.Sticker;
 import com.cs5520.w9firebase.realtimedatabase.models.StickerListAdapter;
-import com.cs5520.w9firebase.realtimedatabase.models.User;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
